@@ -46,7 +46,7 @@ No me generes ninguna otra descripción.`;
     };
     return (
         <>
-            <Head title="Welcome" />
+            <Head title="Tales For All" />
             <h1>Tales For All</h1>
 
             <div className="max-w-4xl w-full bg-white rounded-lg shadow-xl overflow-hidden md:flex md:flex-row flex-col">
