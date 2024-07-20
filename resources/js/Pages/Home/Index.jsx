@@ -9,11 +9,13 @@ export default function Index({ auth }) {
         summa: '',
         image_prompt: ''
     })
-    const { cuento, isLoading, generateStory, handleChange, formData } = useGenerateStory();
+    const { cuento, isLoading, generateStory, handleChange, formData, formErrors } = useGenerateStory();
 
     const handleOnSubmit = (event) => {
         event.preventDefault();
     }
+
+   
     useEffect(() => {
         // Aquí puedes realizar cualquier acción adicional cuando el cuento cambia.
     }, [cuento]);
@@ -35,6 +37,7 @@ export default function Index({ auth }) {
                                 value={formData.temaPrincipal}
                                 onChange={handleChange}
                             />
+                            {formErrors.temaPrincipal && <p className="error">{formErrors.temaPrincipal}</p>}
                         </div>
                         <div>
                             <label>Escenario:</label>
@@ -44,6 +47,7 @@ export default function Index({ auth }) {
                                 value={formData.escenario}
                                 onChange={handleChange}
                             />
+                             {formErrors.escenario && <p className="error">{formErrors.escenario}</p>}
                         </div>
                         <div>
                             <label>Personajes:</label>
@@ -53,6 +57,7 @@ export default function Index({ auth }) {
                                 value={formData.personajes}
                                 onChange={handleChange}
                             />
+                             {formErrors.personajes && <p className="error">{formErrors.personajes}</p>}
                         </div>
                         <div>
                             <label>Tono:</label>
@@ -62,6 +67,7 @@ export default function Index({ auth }) {
                                 value={formData.tono}
                                 onChange={handleChange}
                             />
+                             {formErrors.tono && <p className="error">{formErrors.tono}</p>}
                         </div>
                         <button
                             onClick={generateStory}

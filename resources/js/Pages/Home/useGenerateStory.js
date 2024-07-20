@@ -16,46 +16,69 @@ export default function useGenerateStory() {
         personajes: '',
         tono: ''
     });
+    const [formErrors, setFormErrors] = useState({});
 
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormData({ ...formData, [name]: value });
     };
 
+    const validateForm = () => {
+        const errors = {};
+        if (!formData.temaPrincipal) errors.temaPrincipal = 'El tema principal es obligatorio.';
+        if (!formData.escenario) errors.escenario = 'El escenario es obligatorio.';
+        if (!formData.personajes) errors.personajes = 'Los personajes son obligatorios.';
+        if (!formData.tono) errors.tono = 'El tono es obligatorio.';
+        return errors;
+    };
+
     const generateStory = async () => {
         setIsLoading(true);
 
-        const prompt = `Genera un cuento con estos parámetros:
+        const validationErrors = validateForm();
+        if (Object.keys(validationErrors).length > 0) {
+            setFormErrors(validationErrors);
+            setIsLoading(false);
+            return;
+        }
+
+        const prompt = `Genera un cuento en español con estos parámetros:
         - Tema: ${formData.temaPrincipal}
         - Escenario: ${formData.escenario}
         - Personajes: ${formData.personajes}
         - Tono: ${formData.tono}
 
-        el cuento generado debe tener 300 palabras y 4 párrafos
+        el cuento generado en story debe tener como minimo 300 palabras
 
         La respuesta debe tener un título que refleje el cuento y, debajo, el cuento generado. Los cuentos deben ser aptos para toda la familia.
 
         Genera solo el resultado en un JSON string para usar en TypeScript, json tiene que estar adaptado para poder convertirce correctamente. 
         El JSON debe estar dividido en: 
-        - title: el título del cuento 
+        - title: el título del cuento que refleje el objetivo del cuento
         - story: el cuento generado
         - summary: una sinopsis breve del cuento
         - image_prompt: prompt para generar una imagen que haga referencia al cuento, y que no use los nombres proporcionados sino que haga referencia directa describiendo la escena.
 
         No me generes ninguna otra descripción.`;
 
-        const { text } = await generateText({
-            model: perplexity('llama-3-sonar-small-32k-chat'),
-            prompt: prompt,
-            temperature: 0.6,
-            maxTokens: 3000,
-            frequencyPenalty: 1
-        });
+        try {
+            const { text } = await generateText({
+                model: perplexity('llama-3-sonar-small-32k-chat'),
+                prompt: prompt,
+                temperature: 0.3,
+                maxTokens: 5500,
+                frequencyPenalty: 1
+            });
 
-        const cuentoGenerado = JSON.parse(text);
-        setCuento(cuentoGenerado);
-        setIsLoading(false);
+            const cuentoGenerado = JSON.parse(text);
+            setCuento(cuentoGenerado);
+        } catch (error) {
+            console.error('Error generating story:', error);
+            // Manejar el error aquí si es necesario
+        } finally {
+            setIsLoading(false);
+        }
     };
 
-    return { cuento, isLoading, generateStory, handleChange, formData };
+    return { cuento, isLoading, generateStory, handleChange, formData, formErrors };
 }
