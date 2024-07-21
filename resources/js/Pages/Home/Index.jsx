@@ -23,7 +23,7 @@ export default function Index({ auth, categories }) {
 
     return (
         <>
-            <Head title="Tales For All" />
+            <Head title="Crea tu historia" />
             <h1>Tales For All</h1>
 
             <div className="main-container">
