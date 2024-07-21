@@ -19,6 +19,7 @@ export default function useGenerateStory() {
     const [formErrors, setFormErrors] = useState({});
 
     const handleChange = (event) => {
+        event.preventDefault();
         const { name, value, checked } = event.target;
 
         if (name === 'tono') {
@@ -45,6 +46,9 @@ export default function useGenerateStory() {
     };
 
     const generateStory = async () => {
+
+
+        setCuento("");
         setIsLoading(true);
 
         const validationErrors = validateForm();
@@ -54,34 +58,40 @@ export default function useGenerateStory() {
             return;
         }
 
-        const prompt = `Genera un cuento en español con estos parámetros:
-        - Tema: ${formData.temaPrincipal}
-        - Escenario: ${formData.escenario}
-        - Personajes: ${formData.personajes}
-        - Tono: ${formData.tono.join(', ')}
+        const prompt = `Genera un cuento en español con los siguientes parámetros:
+- Tema: ${formData.temaPrincipal}
+- Escenario: ${formData.escenario}
+- Personajes: ${formData.personajes}
+- Tono: ${formData.tono.join(', ')}
 
-        el cuento generado en story debe tener como minimo 300 palabras
+El cuento debe tener al menos 300 palabras, distribuidas en 4 párrafos, y debe incluir saltos de línea entre párrafos (\n\n).
 
-        La respuesta debe tener un título que refleje el cuento y, debajo, el cuento generado. Los cuentos deben ser aptos para toda la familia.
+solo genera el json como resultado final, no describas nada mas acontinuacion las reglas:
 
-        Genera solo el resultado en un JSON string para usar en TypeScript, json tiene que estar adaptado para poder convertirce correctamente. 
-        El JSON debe estar dividido en: 
-        - title: el título del cuento que refleje el objetivo del cuento
-        - story: el cuento generado
-        - summary: una sinopsis breve del cuento
-        - image_prompt: prompt para generar una imagen que haga referencia al cuento, y que no use los nombres proporcionados sino que haga referencia directa describiendo la escena.
+Proporciona solo un JSON con las siguientes claves:
+- **title**: Un título que refleje el cuento.
+- **story**: El cuento con saltos de línea escapados (\\n\\n).
+- **summary**: Una breve sinopsis del cuento.
+- **image_prompt**: Un prompt para generar una imagen que represente el cuento, sin usar los nombres proporcionados.
 
-        No me generes ninguna otra descripción ni comentario adicional solo genera el json.`;
+Si algún parámetro no es entendible o es inadecuado (por ejemplo, si el Tema es 'dasdsadasd'), devuelve el siguiente JSON:
 
+json
+{
+  "title": "Error en los parámetros",
+  "story": "Había una vez una persona que no sabía lo que quería y escribía cosas sin sentido en los campos.",
+  "summary": "Los parámetros proporcionados no eran claros o válidos.",
+  "image_prompt": "Un campo vacío con papel y lápiz, simbolizando confusión y falta de dirección."
+}
+        `;
         try {
             const { text } = await generateText({
                 model: perplexity('llama-3-sonar-small-32k-chat'),
                 prompt: prompt,
-                temperature: 0.3,
+                temperature: 0.7,
                 maxTokens: 5500,
                 frequencyPenalty: 1
             });
-            console.log(text);
             const cuentoGenerado = JSON.parse(text);
             setCuento(cuentoGenerado);
         } catch (error) {
