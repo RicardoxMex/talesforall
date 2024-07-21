@@ -37,6 +37,7 @@ export default function Index({ auth, categories }) {
                                 name="temaPrincipal"
                                 value={formData.temaPrincipal}
                                 onChange={handleChange}
+                                maxLength={30}
                             />
                             {formErrors.temaPrincipal && <p className="error">{formErrors.temaPrincipal}</p>}
                         </div>
@@ -47,6 +48,7 @@ export default function Index({ auth, categories }) {
                                 name="escenario"
                                 value={formData.escenario}
                                 onChange={handleChange}
+                                maxLength={30}
                             />
                             {formErrors.escenario && <p className="error">{formErrors.escenario}</p>}
                         </div>
@@ -57,6 +59,7 @@ export default function Index({ auth, categories }) {
                                 name="personajes"
                                 value={formData.personajes}
                                 onChange={handleChange}
+                                maxLength={30}
                             />
                             {formErrors.personajes && <p className="error">{formErrors.personajes}</p>}
                         </div>
