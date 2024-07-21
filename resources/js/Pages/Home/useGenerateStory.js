@@ -71,7 +71,7 @@ export default function useGenerateStory() {
         - summary: una sinopsis breve del cuento
         - image_prompt: prompt para generar una imagen que haga referencia al cuento, y que no use los nombres proporcionados sino que haga referencia directa describiendo la escena.
 
-        No me generes ninguna otra descripción.`;
+        No me generes ninguna otra descripción ni comentario adicional solo genera el json.`;
 
         try {
             const { text } = await generateText({
@@ -81,7 +81,7 @@ export default function useGenerateStory() {
                 maxTokens: 5500,
                 frequencyPenalty: 1
             });
-
+            console.log(text);
             const cuentoGenerado = JSON.parse(text);
             setCuento(cuentoGenerado);
         } catch (error) {
