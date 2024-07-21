@@ -2,7 +2,8 @@ import { Head, useForm } from '@inertiajs/react';
 import useGenerateStory from './useGenerateStory';
 import { useEffect } from 'react';
 
-export default function Index({ auth }) {
+export default function Index({ auth, categories }) {
+    console.log(categories);
     const { data, setData, post, errors, reset, patch, put } = useForm({
         title: '',
         story: '',
@@ -15,7 +16,7 @@ export default function Index({ auth }) {
         event.preventDefault();
     }
 
-   
+
     useEffect(() => {
         // Aquí puedes realizar cualquier acción adicional cuando el cuento cambia.
     }, [cuento]);
@@ -47,7 +48,7 @@ export default function Index({ auth }) {
                                 value={formData.escenario}
                                 onChange={handleChange}
                             />
-                             {formErrors.escenario && <p className="error">{formErrors.escenario}</p>}
+                            {formErrors.escenario && <p className="error">{formErrors.escenario}</p>}
                         </div>
                         <div>
                             <label>Personajes:</label>
@@ -57,18 +58,29 @@ export default function Index({ auth }) {
                                 value={formData.personajes}
                                 onChange={handleChange}
                             />
-                             {formErrors.personajes && <p className="error">{formErrors.personajes}</p>}
+                            {formErrors.personajes && <p className="error">{formErrors.personajes}</p>}
                         </div>
                         <div>
-                            <label>Tono:</label>
-                            <input
-                                type="text"
-                                name="tono"
-                                value={formData.tono}
-                                onChange={handleChange}
-                            />
-                             {formErrors.tono && <p className="error">{formErrors.tono}</p>}
-                        </div>
+    <label>Tono:</label>
+    <div className="checkbox-group">
+
+        {categories.data.map((category) => (
+        <label>
+            <input
+                type="checkbox"
+                name="tono"
+                value={category.name}
+                checked={formData.tono.includes(category.name)}
+                onChange={handleChange}
+            />
+           {category.name}
+        </label>
+        ))}
+        
+        
+    </div>
+    {formErrors.tono && <p className="error">{formErrors.tono}</p>}
+</div>
                         <button
                             onClick={generateStory}
                             type='button'

@@ -14,13 +14,23 @@ export default function useGenerateStory() {
         temaPrincipal: '',
         escenario: '',
         personajes: '',
-        tono: ''
+        tono: []
     });
     const [formErrors, setFormErrors] = useState({});
 
     const handleChange = (event) => {
-        const { name, value } = event.target;
-        setFormData({ ...formData, [name]: value });
+        const { name, value, checked } = event.target;
+
+        if (name === 'tono') {
+            setFormData((prevState) => {
+                const newTono = checked
+                    ? [...prevState.tono, value]
+                    : prevState.tono.filter((tono) => tono !== value);
+                return { ...prevState, tono: newTono };
+            });
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
     };
 
     const validateForm = () => {
@@ -28,7 +38,9 @@ export default function useGenerateStory() {
         if (!formData.temaPrincipal) errors.temaPrincipal = 'El tema principal es obligatorio.';
         if (!formData.escenario) errors.escenario = 'El escenario es obligatorio.';
         if (!formData.personajes) errors.personajes = 'Los personajes son obligatorios.';
-        if (!formData.tono) errors.tono = 'El tono es obligatorio.';
+        if (formData.tono.length === 0) {
+            errors.tono = 'Selecciona al menos un tono.';
+        }
         return errors;
     };
 
@@ -46,7 +58,7 @@ export default function useGenerateStory() {
         - Tema: ${formData.temaPrincipal}
         - Escenario: ${formData.escenario}
         - Personajes: ${formData.personajes}
-        - Tono: ${formData.tono}
+        - Tono: ${formData.tono.join(', ')}
 
         el cuento generado en story debe tener como minimo 300 palabras
 

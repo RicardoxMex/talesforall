@@ -110,3 +110,24 @@ input[type="text"] {
         transform: rotate(360deg);
     }
 }
+
+
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.checkbox-group label {
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+}
