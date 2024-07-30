@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('summary');
             $table->string('image_prompt');
             $table->boolean('is_public')->default(true);
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }

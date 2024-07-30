@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StoryController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 
@@ -9,6 +10,9 @@ use App\Http\Controllers\HomeController;
 use Inertia\Inertia;
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
+
+//Routes
+Route::resource('story', StoryController::class)->except(['create', 'edit']);
 
 /*
 Route::get('/', function () {
