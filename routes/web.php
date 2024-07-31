@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StoryController;
+use App\Http\Controllers\TalesForAllController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 
@@ -9,7 +10,25 @@ use Illuminate\Foundation\Application;
 use App\Http\Controllers\HomeController;
 use Inertia\Inertia;
 
-Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::get('/', function () {
+    return redirect()->route('create-story');
+})->name('home.index');
+
+Route::middleware(['auth'])->group(function () {
+    // Ruta para el Dashboard
+
+    // Ruta para "Mis Historias"
+    Route::get('/my-stories', [TalesForAllController::class, 'myStories'])->name('my-stories');
+
+    // Ruta para "Explorar Historias"
+    Route::get('/explore-stories', [TalesForAllController::class, 'exploreStories'])->name('explore-stories');
+
+    // Ruta para "Crear Historia"
+    Route::get('/create-story', [TalesForAllController::class, 'createStory'])->name('create-story');
+
+    // Ruta para "Favoritos"
+    Route::get('/favorites', [TalesForAllController::class, 'favorites'])->name('favorites');
+});
 
 //Routes
 Route::resource('story', StoryController::class)->except(['create', 'edit']);

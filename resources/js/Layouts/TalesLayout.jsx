@@ -3,31 +3,52 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 
 export default function Authenticated({ auth, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
         <div className="min-h-screen bg-gray-100 ">
+            <Head title='Crea tu Historia' />
             <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                         <div className="flex">
-                            <div className="shrink-0 flex items-center">
-                                <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                                </Link>
-                            </div>
+
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                    Dashboard
+                            <NavLink href={route('create-story')} active={route().current('create-story')}>
+                                    Crear Historia
                                 </NavLink>
+                                {
+                                    auth.user !=null ? (
+                                        <>
+                                            <NavLink href={route('my-stories')} active={route().current('my-stories')}>
+                                                Mis Historias
+                                            </NavLink>
+                                            <NavLink href={route('favorites')} active={route().current('favorites')}>
+                                                Favoritos
+                                            </NavLink>
+                                        </>
+                                    ) : (
+                                        <></>
+
+                                    )
+                                }
+                                <NavLink href={route('explore-stories')} active={route().current('explore-stories')}>
+                                    Explorar Historias
+                                </NavLink>
+                                
+
+
+
+
+
                             </div>
                         </div>
 
-                        {!auth ? (
+                        {auth.user != null ? (
                             <div className="hidden sm:flex sm:items-center sm:ms-6">
                                 <div className="ms-3 relative">
                                     <Dropdown>
@@ -95,7 +116,7 @@ export default function Authenticated({ auth, header, children }) {
                         </div>
                     </div>
                 </div>
-                {!auth ? (
+                {auth.user != null? (
                     <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                         <div className="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
                             <div className="px-4">
@@ -104,6 +125,11 @@ export default function Authenticated({ auth, header, children }) {
                             </div>
 
                             <div className="mt-3 space-y-1">
+                            <ResponsiveNavLink href={route('create-story')}>Crear Historia</ResponsiveNavLink>
+                            <ResponsiveNavLink href={route('my-stories')} >Mis Historias</ResponsiveNavLink>
+                            <ResponsiveNavLink href={route('favorites')}>Favoritos</ResponsiveNavLink>
+                            <ResponsiveNavLink href={route('explore-stories')}>Explorar Historias</ResponsiveNavLink>
+                            
                                 <ResponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
                                 <ResponsiveNavLink method="post" href={route('logout')} as="button">
                                     Log Out
@@ -115,7 +141,9 @@ export default function Authenticated({ auth, header, children }) {
                     <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                         <div className="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
                             <div className="mt-3 space-y-1">
-                                <ResponsiveNavLink  href={route('login')} as="button">
+                            <ResponsiveNavLink href={route('create-story')}>Crear Historia</ResponsiveNavLink>
+                            <ResponsiveNavLink href={route('explore-stories')}>Explorar Historias</ResponsiveNavLink>
+                                <ResponsiveNavLink href={route('login')} as="button">
                                     Log In
                                 </ResponsiveNavLink>
                             </div>
