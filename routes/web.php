@@ -10,29 +10,21 @@ use Illuminate\Foundation\Application;
 use App\Http\Controllers\HomeController;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return redirect()->route('create-story');
-})->name('home.index');
 
-Route::middleware(['auth'])->group(function () {
-    // Ruta para el Dashboard
 
+Route::middleware(['auth', 'verified'])->group(function () {
     // Ruta para "Mis Historias"
     Route::get('/my-stories', [TalesForAllController::class, 'myStories'])->name('my-stories');
-
-
-
     // Ruta para "Favoritos"
     Route::get('/favorites', [TalesForAllController::class, 'favorites'])->name('favorites');
 });
-// Ruta para "Explorar Historias"
+//Public Routes
+Route::get('/', function () {
+    return redirect()->route('create-story');
+})->name('home.index');
 Route::get('/explore-stories', [TalesForAllController::class, 'exploreStories'])->name('explore-stories');
-
-// Ruta para "Crear Historia"
 Route::get('/create-story', [TalesForAllController::class, 'createStory'])->name('create-story');
-
 Route::get('/story/{slug}', [TalesForAllController::class, 'show'])->name('story-page');
-//Routes
 Route::resource('story', StoryController::class)->except(['create', 'edit']);
 
 
