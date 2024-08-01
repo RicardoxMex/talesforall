@@ -88,7 +88,7 @@ export default function useGenerateStory() {
 
         Proporciona solo un JSON con las siguientes claves:
         - **title**: Un título que refleje el cuento.
-        - **story**: El cuento generado no debe tener saltos de lineas.
+        - **story**: El cuento generado y el caracter que debe representar el salto de linea entre parrafo es \\n.
         - **summary**: Una breve sinopsis del cuento.
         - **image_prompt**: Un prompt para generar una imagen que represente el cuento, sin usar los nombres proporcionados.
 

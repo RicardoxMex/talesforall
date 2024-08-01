@@ -23,6 +23,7 @@ class StoryResource extends JsonResource
             'title'=>$this->title,
             'summary'=>$this->summary,
             'story'=>$this->story,
+            'categories'=>CategoryResource::collection($this->categories),
             'author'=> $user->name,
             'user_id'=>(int)$user->id,
         ];

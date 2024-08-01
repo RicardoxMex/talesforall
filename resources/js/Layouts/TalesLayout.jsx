@@ -25,23 +25,21 @@ export default function Authenticated({ auth, header, children }) {
                                             <NavLink href={route('my-stories')} active={route().current('my-stories')}>
                                                 Mis Historias
                                             </NavLink>
-                                            <NavLink href={route('favorites')} active={route().current('favorites')}>
-                                                Favoritos
-                                            </NavLink>
+                                            {
+                                                /* <NavLink href={route('favorites')} active={route().current('favorites')}>
+                                                 Favoritos
+                                             </NavLink>*
+                                             <NavLink href={route('explore-stories')} active={route().current('explore-stories')}>
+                                     Explorar Historias
+                                 </NavLink>
+                                             */
+                                            }
                                         </>
                                     ) : (
                                         <></>
 
                                     )
                                 }
-                                <NavLink href={route('explore-stories')} active={route().current('explore-stories')}>
-                                    Explorar Historias
-                                </NavLink>
-
-
-
-
-
 
                             </div>
                         </div>
@@ -125,8 +123,12 @@ export default function Authenticated({ auth, header, children }) {
                             <div className="mt-3 space-y-1">
                                 <ResponsiveNavLink href={route('create-story')}>Crear Historia</ResponsiveNavLink>
                                 <ResponsiveNavLink href={route('my-stories')} >Mis Historias</ResponsiveNavLink>
-                                <ResponsiveNavLink href={route('favorites')}>Favoritos</ResponsiveNavLink>
-                                <ResponsiveNavLink href={route('explore-stories')}>Explorar Historias</ResponsiveNavLink>
+                                {
+                                    /*<ResponsiveNavLink href={route('favorites')}>Favoritos</ResponsiveNavLink>
+                                    <ResponsiveNavLink href={route('explore-stories')}>Explorar Historias</ResponsiveNavLink>*/
+                                }
+
+
 
                                 <ResponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
                                 <ResponsiveNavLink method="post" href={route('logout')} as="button">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Story;
 use App\Http\Requests\StoreStoryRequest;
 use App\Http\Requests\UpdateStoryRequest;
@@ -31,6 +32,7 @@ class StoryController extends Controller
     public function store(StoreStoryRequest $request)
     {
         $story = new Story();
+       // dd($request);
         $story->title = $request->title;
         $story->story = $request->story;
         $story->summary = $request->summary;
@@ -48,8 +50,12 @@ class StoryController extends Controller
         } else {
             $story->user_id = $request->user_id;
         }
+        $story->updated_at = now();
 
         $story->save();
+
+        // Asociar categorías
+        $story->categories()->attach($request->categories);
     }
 
     /**

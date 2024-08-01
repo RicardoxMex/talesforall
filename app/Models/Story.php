@@ -24,6 +24,6 @@ class Story extends Model
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'category_story');
+        return $this->belongsToMany(Category::class, 'category_stories');
     }
 }

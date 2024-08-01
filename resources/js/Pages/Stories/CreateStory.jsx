@@ -2,11 +2,25 @@ import { Head, router, useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
 import TalesLayout from '@/Layouts/TalesLayout';
 import useGenerateStory from './data/useGenerateStory';
+import Story from '@/Components/TalesForAll/Story';
 
 export default function CreateStory({ auth, categories }) {
     console.log(auth);
    // const { data, setData, post, errors, reset } = useForm();
     const { cuento, isLoading, generateStory, handleChange, formData, formErrors, isError } = useGenerateStory();
+    console.log(categories)
+
+    const selectedCategoryIds = formData.tono.map(selectedName => {
+        console.log(categories.data)
+        // Encuentra la categoría cuyo nombre coincide con el nombre seleccionado
+        const category = categories.data.find(cat => cat.name === selectedName);
+
+        console.log('categori', category);
+        // Devuelve el ID de la categoría encontrada, o null si no se encuentra
+        return category ? category.id : null;
+      }).filter(id => id !== null); // Filtra los valores null para obtener solo los IDs válidos
+      
+      console.log(selectedCategoryIds); 
 
     useEffect(() => {
         console.log(cuento?.length);
@@ -20,8 +34,9 @@ export default function CreateStory({ auth, categories }) {
                 title:cuento.title,
                 story:cuento.story,
                 summary:cuento.summary,
-                image_prompt:cuento.image_prompt || '', // Ajuste para manejar la ausencia de image_prompt
-                user_id: user_id, // Ajuste para manejar la ausencia de user_id
+                image_prompt:cuento.image_prompt || '',
+                categories: selectedCategoryIds,
+                user_id: user_id, 
                })
         }
     }, [cuento]); // Este efecto se activará cuando 'cuento' cambie
@@ -111,12 +126,7 @@ export default function CreateStory({ auth, categories }) {
                     ) : (
                         cuento ? (
                             <div className="cuento p-4 bg-white rounded-lg shadow-md">
-                                <h1 className="text-2xl font-bold mb-4 text-gray-800">{cuento.title}</h1>
-                                {cuento.story.split('\n').map((line, index) => (
-                                    <p className="mb-4 text-gray-700" key={index}>
-                                        {line}
-                                    </p>
-                                ))}
+                                <Story cuento={cuento} />
                             </div>
                         ) : (
                             !isError ? (
