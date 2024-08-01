@@ -53,6 +53,14 @@ export default function useGenerateStory() {
         }
         return errors;
     };
+    const  extractJsonString = (text) => {
+        const startIndex = text.indexOf('{');
+        const endIndex = text.indexOf('}') + 1;
+        if (startIndex !== -1 && endIndex !== -1) {
+          return text.substring(startIndex, endIndex);
+        }
+        return null;
+      }
 
     const generateStory = async () => {
         setCuento("");
@@ -74,13 +82,13 @@ export default function useGenerateStory() {
         - Tono: ${formData.tono.join(', ')}
 
         El cuento debe tener al menos 300 palabras, distribuidas en 4 párrafos.
-        los caracteres que debes de excuir en todos los cuentos son: " '
+        los caracteres que debes de excluir en todos los cuentos son: " '
 
         solo genera el json como resultado final, no describas nada mas acontinuacion las reglas:
 
         Proporciona solo un JSON con las siguientes claves:
         - **title**: Un título que refleje el cuento.
-        - **story**: El cuento.
+        - **story**: El cuento generado no debe tener saltos de lineas.
         - **summary**: Una breve sinopsis del cuento.
         - **image_prompt**: Un prompt para generar una imagen que represente el cuento, sin usar los nombres proporcionados.
 
@@ -103,7 +111,8 @@ export default function useGenerateStory() {
                 frequencyPenalty: 1
             });
             console.log(text);
-            const cuentoGenerado = JSON.parse(text);
+            const newText = extractJsonString(text)
+            const cuentoGenerado = JSON.parse(newText);
             
             
             setCuento(cuentoGenerado);

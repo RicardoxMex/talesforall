@@ -20,18 +20,21 @@ Route::middleware(['auth'])->group(function () {
     // Ruta para "Mis Historias"
     Route::get('/my-stories', [TalesForAllController::class, 'myStories'])->name('my-stories');
 
-    // Ruta para "Explorar Historias"
-    Route::get('/explore-stories', [TalesForAllController::class, 'exploreStories'])->name('explore-stories');
 
-    // Ruta para "Crear Historia"
-    Route::get('/create-story', [TalesForAllController::class, 'createStory'])->name('create-story');
 
     // Ruta para "Favoritos"
     Route::get('/favorites', [TalesForAllController::class, 'favorites'])->name('favorites');
 });
+// Ruta para "Explorar Historias"
+Route::get('/explore-stories', [TalesForAllController::class, 'exploreStories'])->name('explore-stories');
 
+// Ruta para "Crear Historia"
+Route::get('/create-story', [TalesForAllController::class, 'createStory'])->name('create-story');
+
+Route::get('/story/{slug}', [TalesForAllController::class, 'show'])->name('story-page');
 //Routes
 Route::resource('story', StoryController::class)->except(['create', 'edit']);
+
 
 /*
 Route::get('/', function () {
@@ -53,4 +56,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

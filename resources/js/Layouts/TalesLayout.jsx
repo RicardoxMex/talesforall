@@ -9,20 +9,18 @@ export default function Authenticated({ auth, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100 ">
+        <div className="h-screen flex flex-col bg-gray-100 ">
             <Head title='Crea tu Historia' />
-            <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+            <nav className=" sticky top-0 z-10 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                         <div className="flex">
-
-
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                            <NavLink href={route('create-story')} active={route().current('create-story')}>
+                                <NavLink href={route('create-story')} active={route().current('create-story')}>
                                     Crear Historia
                                 </NavLink>
                                 {
-                                    auth.user !=null ? (
+                                    auth.user != null ? (
                                         <>
                                             <NavLink href={route('my-stories')} active={route().current('my-stories')}>
                                                 Mis Historias
@@ -39,7 +37,7 @@ export default function Authenticated({ auth, header, children }) {
                                 <NavLink href={route('explore-stories')} active={route().current('explore-stories')}>
                                     Explorar Historias
                                 </NavLink>
-                                
+
 
 
 
@@ -116,7 +114,7 @@ export default function Authenticated({ auth, header, children }) {
                         </div>
                     </div>
                 </div>
-                {auth.user != null? (
+                {auth.user != null ? (
                     <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                         <div className="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
                             <div className="px-4">
@@ -125,11 +123,11 @@ export default function Authenticated({ auth, header, children }) {
                             </div>
 
                             <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('create-story')}>Crear Historia</ResponsiveNavLink>
-                            <ResponsiveNavLink href={route('my-stories')} >Mis Historias</ResponsiveNavLink>
-                            <ResponsiveNavLink href={route('favorites')}>Favoritos</ResponsiveNavLink>
-                            <ResponsiveNavLink href={route('explore-stories')}>Explorar Historias</ResponsiveNavLink>
-                            
+                                <ResponsiveNavLink href={route('create-story')}>Crear Historia</ResponsiveNavLink>
+                                <ResponsiveNavLink href={route('my-stories')} >Mis Historias</ResponsiveNavLink>
+                                <ResponsiveNavLink href={route('favorites')}>Favoritos</ResponsiveNavLink>
+                                <ResponsiveNavLink href={route('explore-stories')}>Explorar Historias</ResponsiveNavLink>
+
                                 <ResponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
                                 <ResponsiveNavLink method="post" href={route('logout')} as="button">
                                     Log Out
@@ -141,8 +139,8 @@ export default function Authenticated({ auth, header, children }) {
                     <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                         <div className="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
                             <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('create-story')}>Crear Historia</ResponsiveNavLink>
-                            <ResponsiveNavLink href={route('explore-stories')}>Explorar Historias</ResponsiveNavLink>
+                                <ResponsiveNavLink href={route('create-story')}>Crear Historia</ResponsiveNavLink>
+                                <ResponsiveNavLink href={route('explore-stories')}>Explorar Historias</ResponsiveNavLink>
                                 <ResponsiveNavLink href={route('login')} as="button">
                                     Log In
                                 </ResponsiveNavLink>
@@ -153,8 +151,13 @@ export default function Authenticated({ auth, header, children }) {
 
             </nav>
 
+            {header && (
+                <header className="bg-white dark:bg-gray-800 shadow">
+                    <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">{header}</div>
+                </header>
+            )}
 
-            <main>{children}</main>
+            <main className='flex-1 overflow-y-auto p-0 bg-gray-100'>{children}</main>
         </div>
     );
 }

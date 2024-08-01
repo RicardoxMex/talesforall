@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Story;
 use App\Http\Requests\StoreStoryRequest;
 use App\Http\Requests\UpdateStoryRequest;
+use Illuminate\Support\Str;
 
 class StoryController extends Controller
 {
@@ -29,20 +30,26 @@ class StoryController extends Controller
      */
     public function store(StoreStoryRequest $request)
     {
-       $story = new Story();
+        $story = new Story();
+        $story->title = $request->title;
+        $story->story = $request->story;
+        $story->summary = $request->summary;
+        $story->image_prompt = $request->image_prompt;
 
-       $story->title = $request->title;
-       $story->story = $request->story;
-       $story->summary = $request->summary;
-       $story->image_prompt = $request->image_prompt;
+        $slug = Str::slug($story->title);
+        $existingStoryCount = Story::where('slug', 'like', "$slug%")->count();
+        if ($existingStoryCount > 0) {
+            $slug = "{$slug}-{$existingStoryCount}";
+        }
+        $story->slug = $slug;
 
-       if($request->user_id == 0){
-        $story->user_id = 1;
-       }else{
-        $story->user_id = $request->user_id;
-       }
+        if ($request->user_id == 0) {
+            $story->user_id = 1;
+        } else {
+            $story->user_id = $request->user_id;
+        }
 
-       $story->save();
+        $story->save();
     }
 
     /**

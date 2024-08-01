@@ -1,9 +1,9 @@
 import { Head, router, useForm } from '@inertiajs/react';
-import useGenerateStory from './useGenerateStory';
 import { useEffect } from 'react';
 import TalesLayout from '@/Layouts/TalesLayout';
+import useGenerateStory from './data/useGenerateStory';
 
-export default function Index({ auth, categories }) {
+export default function CreateStory({ auth, categories }) {
     console.log(auth);
    // const { data, setData, post, errors, reset } = useForm();
     const { cuento, isLoading, generateStory, handleChange, formData, formErrors, isError } = useGenerateStory();
@@ -12,7 +12,10 @@ export default function Index({ auth, categories }) {
         console.log(cuento?.length);
         if (cuento?.length != 0 && cuento !=  undefined
         ) {
-            let user_id = !auth?.user ? auth?.user?.id : 0
+            let user_id = 0;
+            if(auth.user != null){
+                user_id = auth.user.id;
+            }
             router.post('/story', {
                 title:cuento.title,
                 story:cuento.story,
@@ -99,13 +102,7 @@ export default function Index({ auth, categories }) {
                         >
                             Crear cuento
                         </button>
-                        <button
-                            type="button"
-                            className="w-full mt-2 bg-green-300 rounded-lg p-3 text-white"
-                            disabled
-                        >
-                            Guardar
-                        </button>
+                        
                     </form>
                 </div>
                 <div className="cuento-container p-6 bg-gray-100 rounded-lg shadow-lg flex flex-col items-center justify-center">
