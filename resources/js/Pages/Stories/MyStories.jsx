@@ -7,6 +7,7 @@ export default function MyStories({ auth, stories }) {
     const storieslist = stories.data ?? []
     console.log(stories)
     console.log(storieslist)
+
     return (
         <TalesLayout auth={auth}>
             <Head title="Mis Historias" />
@@ -25,6 +26,7 @@ export default function MyStories({ auth, stories }) {
                                     rating={story.rating}
                                     slug={story.slug}
                                     categories={story.categories}
+                                    is_public={story.is_public}
                                 />
                             ))}
                         </div>

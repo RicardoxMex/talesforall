@@ -1,9 +1,12 @@
 import React from 'react';
-const Story = ({ cuento }) => {
+const Story = ({ cuento, title=true }) => {
 
     return (
         <>
-            <h1 className="text-5xl font-serif font-bold mb-4 text-brown">{cuento.title}</h1>
+            {title ? (
+                 <h1 className="text-5xl font-serif font-bold mb-4 text-brown">{cuento.title}</h1>
+            ):''}
+           
             <p className="text-lg italic mb-6">{cuento.author != null ? `Por ${cuento.author}` : 'Cuento generado'}</p>
             <img
               src={cuento?.coverImage || '/img/TalesForAll.webp'}

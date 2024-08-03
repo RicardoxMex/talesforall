@@ -25,6 +25,7 @@ class StoryResource extends JsonResource
             'story'=>$this->story,
             'categories'=>CategoryResource::collection($this->categories),
             'author'=> $user->name,
+            'is_public'=>(bool)$this->is_public,
             'user_id'=>(int)$user->id,
         ];
     }

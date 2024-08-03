@@ -79,7 +79,9 @@ class StoryController extends Controller
      */
     public function update(UpdateStoryRequest $request, Story $story)
     {
-        //
+        $story->title = $request->title;
+        $story->is_public = $request->is_public;
+        $story->save();
     }
 
     /**
