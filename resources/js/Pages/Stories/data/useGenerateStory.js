@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { generateText } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
 import { useForm } from '@inertiajs/react';
@@ -7,6 +7,8 @@ const perplexity = createOpenAI({
     apiKey: import.meta.env.VITE_PER_API_PUBLIC_KEY,
     baseURL: 'https://api.perplexity.ai'
 });
+
+
 
 export default function useGenerateStory() {
     const [cuento, setCuento] = useState(null);
@@ -26,6 +28,42 @@ export default function useGenerateStory() {
         tono: []
     });
     const [formErrors, setFormErrors] = useState({});
+
+
+    const prompt = `Genera un cuento en español con los siguientes parámetros:
+    - Tema: ${formData.temaPrincipal}
+    - Escenario: ${formData.escenario}
+    - Personajes: ${formData.personajes}
+    - Tono: ${formData.tono.join(', ')}
+
+    El cuento debe tener al menos 300 palabras, distribuidas en 4 párrafos.
+    los caracteres que debes de excluir en todos los cuentos son: " '
+
+    solo genera el json como resultado final, no describas nada mas acontinuacion las reglas:
+
+    Proporciona solo un JSON con las siguientes claves:
+    - **title**: Un título que refleje el cuento.
+    - **story**: El cuento generado debe ser dirigido para toda la familia por lo que no puede tener insultos, ofensas o violencia como extra el caracter que debe representar el salto de linea entre parrafo es \\n.
+    - **summary**: Una breve sinopsis del cuento.
+    - **image_prompt**: Un prompt para generar una imagen que represente el cuento, sin usar los nombres proporcionados.
+
+    Si algún parámetro no es entendible o es inadecuado (por ejemplo, si el Tema es 'dasdsadasd'), devuelve el siguiente JSON:
+
+    json
+    {
+    "title": "Error en los parámetros",
+    "story": "Había una vez una persona que no sabía lo que quería y escribía cosas sin sentido en los campos.",
+    "summary": "Los parámetros proporcionados no eran claros o válidos.",
+    "image_prompt": "Un campo vacío con papel y lápiz, simbolizando confusión y falta de dirección."
+    }
+    `;
+    const CONFIG_PERPLEXITY = {
+        model: perplexity('llama-3-sonar-small-32k-chat'),
+        prompt: prompt,
+        temperature: .8,
+        maxTokens: 5500,
+        frequencyPenalty: 1
+    }
 
     const handleChange = (event) => {
         const { name, value, checked } = event.target;
@@ -53,14 +91,14 @@ export default function useGenerateStory() {
         }
         return errors;
     };
-    const  extractJsonString = (text) => {
+    const extractJsonString = (text) => {
         const startIndex = text.indexOf('{');
         const endIndex = text.indexOf('}') + 1;
         if (startIndex !== -1 && endIndex !== -1) {
-          return text.substring(startIndex, endIndex);
+            return text.substring(startIndex, endIndex);
         }
         return null;
-      }
+    }
 
     const generateStory = async () => {
         setCuento("");
@@ -75,62 +113,30 @@ export default function useGenerateStory() {
             return;
         }
 
-        const prompt = `Genera un cuento en español con los siguientes parámetros:
-        - Tema: ${formData.temaPrincipal}
-        - Escenario: ${formData.escenario}
-        - Personajes: ${formData.personajes}
-        - Tono: ${formData.tono.join(', ')}
 
-        El cuento debe tener al menos 300 palabras, distribuidas en 4 párrafos.
-        los caracteres que debes de excluir en todos los cuentos son: " '
-
-        solo genera el json como resultado final, no describas nada mas acontinuacion las reglas:
-
-        Proporciona solo un JSON con las siguientes claves:
-        - **title**: Un título que refleje el cuento.
-        - **story**: El cuento generado y el caracter que debe representar el salto de linea entre parrafo es \\n.
-        - **summary**: Una breve sinopsis del cuento.
-        - **image_prompt**: Un prompt para generar una imagen que represente el cuento, sin usar los nombres proporcionados.
-
-        Si algún parámetro no es entendible o es inadecuado (por ejemplo, si el Tema es 'dasdsadasd'), devuelve el siguiente JSON:
-
-        json
-        {
-        "title": "Error en los parámetros",
-        "story": "Había una vez una persona que no sabía lo que quería y escribía cosas sin sentido en los campos.",
-        "summary": "Los parámetros proporcionados no eran claros o válidos.",
-        "image_prompt": "Un campo vacío con papel y lápiz, simbolizando confusión y falta de dirección."
-        }
-        `;
         try {
-            const { text } = await generateText({
-                model: perplexity('llama-3-sonar-small-32k-chat'),
-                prompt: prompt,
-                temperature: 0.7,
-                maxTokens: 5500,
-                frequencyPenalty: 1
-            });
-            console.log(text);
+            const { text } = await generateText(CONFIG_PERPLEXITY);
+            //console.log(text);
             const newText = extractJsonString(text)
             const cuentoGenerado = JSON.parse(newText);
-            
-            
+
+
             setCuento(cuentoGenerado);
-           /* console.log(cuentoGenerado);
-            setData('title', cuento.title )
-            setData('story', cuento.story )
-            setData('summary', cuento.summary )
-            console.log('submit', data)*/
-            
+            /* //console.log(cuentoGenerado);
+             setData('title', cuento.title )
+             setData('story', cuento.story )
+             setData('summary', cuento.summary )
+             //console.log('submit', data)*/
+
         } catch (error) {
             console.error('Error generating story:', error);
             setIsError(true);
             // Manejar el error aquí si es necesario
         } finally {
-            
+
             setIsLoading(false);
         }
     };
 
-    return { cuento, isLoading, generateStory, handleChange, formData, formErrors, isError, post, data};
+    return { cuento, isLoading, generateStory, handleChange, formData, formErrors, isError, post, data };
 }

@@ -102,16 +102,16 @@ export default function useGenerateStory() {
                 maxTokens: 5500,
                 frequencyPenalty: 1
             });
-            console.log(text);
+            //console.log(text);
             const cuentoGenerado = JSON.parse(text);
             
             
             setCuento(cuentoGenerado);
-           /* console.log(cuentoGenerado);
+           /* //console.log(cuentoGenerado);
             setData('title', cuento.title )
             setData('story', cuento.story )
             setData('summary', cuento.summary )
-            console.log('submit', data)*/
+            //console.log('submit', data)*/
             
         } catch (error) {
             console.error('Error generating story:', error);

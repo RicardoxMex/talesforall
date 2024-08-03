@@ -4,12 +4,12 @@ import { useEffect } from 'react';
 import TalesLayout from '@/Layouts/TalesLayout';
 
 export default function Index({ auth, categories }) {
-    console.log(auth);
+    //console.log(auth);
    // const { data, setData, post, errors, reset } = useForm();
     const { cuento, isLoading, generateStory, handleChange, formData, formErrors, isError } = useGenerateStory();
 
     useEffect(() => {
-        console.log(cuento?.length);
+        //console.log(cuento?.length);
         if (cuento?.length != 0 && cuento !=  undefined
         ) {
             let user_id = !auth?.user ? auth?.user?.id : 0

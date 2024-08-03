@@ -5,8 +5,8 @@ import { Head } from '@inertiajs/react';
 
 export default function Index({ auth, stories }) {
     const storieslist = stories.data ?? []
-    console.log(stories)
-    console.log(storieslist)
+    //console.log(stories)
+    //console.log(storieslist)
     return (
         <TalesLayout auth={auth}>
             <Head title="Mis Historias" />

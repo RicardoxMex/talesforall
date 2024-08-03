@@ -5,7 +5,7 @@ import Story from '@/Components/TalesForAll/Story';
 
 const ShowStory = ({ storyData, auth }) => {
   const story = storyData.data;
-  console.log(story)
+  //console.log(story)
   const [editTitle, setEditTitle] = useState(false);
   const [title, setTitle] = useState(story.title);
   const [is_public, setIsPublic] = useState(story.is_public);
@@ -29,7 +29,7 @@ const ShowStory = ({ storyData, auth }) => {
   }, [hasChanged]);
 
   const saveData = () => {
-    console.log('Saving data');
+    //console.log('Saving data');
     router.post(route('story.update', { story: story.id }), {
       title,
       is_public:is_public,

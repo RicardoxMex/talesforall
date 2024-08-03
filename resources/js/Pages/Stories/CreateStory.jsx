@@ -5,25 +5,17 @@ import useGenerateStory from './data/useGenerateStory';
 import Story from '@/Components/TalesForAll/Story';
 
 export default function CreateStory({ auth, categories }) {
-    console.log(auth);
-   // const { data, setData, post, errors, reset } = useForm();
     const { cuento, isLoading, generateStory, handleChange, formData, formErrors, isError } = useGenerateStory();
-    console.log(categories)
-
     const selectedCategoryIds = formData.tono.map(selectedName => {
-        console.log(categories.data)
         // Encuentra la categoría cuyo nombre coincide con el nombre seleccionado
         const category = categories.data.find(cat => cat.name === selectedName);
 
-        console.log('categori', category);
         // Devuelve el ID de la categoría encontrada, o null si no se encuentra
         return category ? category.id : null;
       }).filter(id => id !== null); // Filtra los valores null para obtener solo los IDs válidos
       
-      console.log(selectedCategoryIds); 
 
     useEffect(() => {
-        console.log(cuento?.length);
         if (cuento?.length != 0 && cuento !=  undefined
         ) {
             let user_id = 0;
@@ -57,7 +49,7 @@ export default function CreateStory({ auth, categories }) {
 
             <div className="main-container">
                 <div className="form-container">
-                    <h1>Nuevo Cuento</h1>
+                    <h1 className='text-2xl'>Nuevo Cuento</h1>
                     <form onSubmit={handleOnSubmit}>
                         <div>
                             <label>Tema Principal:</label>
