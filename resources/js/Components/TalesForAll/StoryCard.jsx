@@ -5,7 +5,7 @@ const StoryCard = ({id,  title, summary, author, rating, coverImage, slug, categ
   return (
     <Link href={route('story-page', slug)} className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row mb-6">
       {coverImage && (
-        <div className="h-48 md:h-auto md:w-48 flex-none bg-cover bg-center" style={{ backgroundImage: `url(${coverImage})` }} title={title}></div>
+        <img className="h-48 md:h-auto md:w-48 flex-none bg-center object-cover object-top" src='/img/TalesForAll.webp' title={title} ></img>
       )}
       <div className="p-4 flex flex-col justify-between">
         <div>
