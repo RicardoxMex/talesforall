@@ -25,7 +25,6 @@ export default function MyStories({ auth, stories }) {
                                     rating={story.rating}
                                     slug={story.slug}
                                     categories={story.categories}
-                                    coverImage="https://imgs.search.brave.com/BAg9ProDJhVKjEavhStUY0Rc8dtsTCqcorOBTUCNqb0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zcC1h/by5zaG9ydHBpeGVs/LmFpL2NsaWVudC90/b19hdXRvLHFfZ2xv/c3N5LHJldF9pbWcs/d181OTAsaF81OTAv/aHR0cHM6Ly93d3cu/bXVtYWJsdWUuY29t/L2Jsb2cvd3AtY29u/dGVudC91cGxvYWRz/LzIwMjIvMDkvY3Vl/bnRvcy1pbmZhbnRp/bGVzLWF1ZGlvLmpw/Zw"
                                 />
                             ))}
                         </div>

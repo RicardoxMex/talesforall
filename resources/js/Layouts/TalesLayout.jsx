@@ -142,7 +142,7 @@ export default function Authenticated({ auth, header, children }) {
                         <div className="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
                             <div className="mt-3 space-y-1">
                                 <ResponsiveNavLink href={route('create-story')}>Crear Historia</ResponsiveNavLink>
-                                <ResponsiveNavLink href={route('explore-stories')}>Explorar Historias</ResponsiveNavLink>
+                                {/**<ResponsiveNavLink href={route('explore-stories')}>Explorar Historias</ResponsiveNavLink> */}
                                 <ResponsiveNavLink href={route('login')} as="button">
                                     Log In
                                 </ResponsiveNavLink>
