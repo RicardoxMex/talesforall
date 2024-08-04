@@ -19,6 +19,7 @@ export default function Authenticated({ auth, header, children }) {
                                 <NavLink href={route('create-story')} active={route().current('create-story')}>
                                     Crear Historia
                                 </NavLink>
+
                                 {
                                     auth.user != null ? (
                                         <>
@@ -28,15 +29,18 @@ export default function Authenticated({ auth, header, children }) {
                                             <NavLink href={route('favorites')} active={route().current('favorites')}>
                                                 Favoritos
                                             </NavLink>*
-                                            <NavLink href={route('explore-stories')} active={route().current('explore-stories')}>
-                                                Explorar Historias
-                                            </NavLink>
+
                                         </>
                                     ) : (
                                         <></>
 
                                     )
+
                                 }
+
+                                <NavLink href={route('explore-stories')} active={route().current('explore-stories')}>
+                                    Explorar Historias
+                                </NavLink>
 
                             </div>
                         </div>

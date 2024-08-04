@@ -4,7 +4,7 @@ import TalesLayout from '@/Layouts/TalesLayout';
 import Story from '@/Components/TalesForAll/Story';
 
 const ShowStory = ({ storyData, auth, favorite=false }) => {
- 
+ console.log(favorite)
   const story = storyData.data;
   const [editTitle, setEditTitle] = useState(false);
   const [title, setTitle] = useState(story.title);
@@ -12,8 +12,9 @@ const ShowStory = ({ storyData, auth, favorite=false }) => {
   const [is_favorite, setIsFavorite] = useState(story.is_favorite); // Estado para favoritos
   const [hasChanged, setHasChanged] = useState(false);
 
-  const curretUser = auth.user.id ?? 0
-  const author = story.user_id
+
+  const curretUser = auth?.user?.id ?? 0
+  const author = story?.user_id
 
   console.log(story)
 
@@ -56,7 +57,8 @@ const ShowStory = ({ storyData, auth, favorite=false }) => {
     if(favorite){
       return router.visit('/favorites')
     }
-    return router.visit('/my-stories')
+
+    window.history.back();
   };
 
   return (

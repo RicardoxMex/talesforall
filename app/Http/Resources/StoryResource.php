@@ -19,9 +19,13 @@ class StoryResource extends JsonResource
         $author = User::where("id", $this->user_id)->first();
         $user = auth()->user();
         $is_favorite = false;
-        if($user->favoriteStories->contains($this->id)){
-            $is_favorite = true;
+
+        if($user){
+            if($user->favoriteStories->contains($this->id)){
+                $is_favorite = true;
+            }
         }
+        
         return [
             'id'=>$this->id,
             'slug'=>(string)$this->slug,

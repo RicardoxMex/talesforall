@@ -27,7 +27,7 @@ export default function ExploreStories({ auth, stories }) {
                                         categories={story.categories}
                                         is_public={story.is_public}
                                         is_favorite={story.is_favorite}
-                                        favorite
+                                        favorite = {false}
                                     />
                                 ))}
                             </div>
