@@ -43,10 +43,9 @@ export default function CreateStory({ auth, categories }) {
     return (
         <TalesLayout
             auth={auth}
+            title='Crear Historia'
+            style='bg-gray-100/[1] shadow-none'
         >
-            <Head title='Crear Historia'/>
-            <h1>Tales For All</h1>
-
             <div className="main-container">
                 <div className="form-container">
                     <h1 className='text-2xl'>Nuevo Cuento</h1>

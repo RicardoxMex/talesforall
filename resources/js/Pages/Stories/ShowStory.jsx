@@ -16,9 +16,6 @@ const ShowStory = ({ storyData, auth, favorite=false }) => {
   const curretUser = auth?.user?.id ?? 0
   const author = story?.user_id
 
-  console.log(story)
-
-
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };

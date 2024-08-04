@@ -5,12 +5,12 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Head, Link } from '@inertiajs/react';
 
-export default function Authenticated({ auth, header, children }) {
+export default function TalesLayout({ auth, header, children, title, style='' }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
-        <div className="h-screen flex flex-col bg-gray-100 ">
-            <Head title='Crea tu Historia' />
+        <div className={ `h-screen flex flex-col bg-gray-100`}>
+            <Head title={title} />
             <nav className=" sticky top-0 z-10 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
@@ -158,7 +158,16 @@ export default function Authenticated({ auth, header, children }) {
                 </header>
             )}
 
-            <main className='flex-1 overflow-y-auto p-0 bg-gray-100'>{children}</main>
+            <div className="md:py-12 bg-gray-100 min-h-screen">
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div className={`bg-white shadow-md rounded-lg p-1 md:p-6 ${style}`}>
+                    <h1 className="m-0 text-3xl font-bold text-gray-900 mb-6">{title}</h1>
+                        <main className='flex-1 overflow-y-auto'>{children}</main>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     );
 }
