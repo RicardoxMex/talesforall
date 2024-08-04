@@ -32,7 +32,7 @@ class StoryController extends Controller
     public function store(StoreStoryRequest $request)
     {
         $story = new Story();
-       // dd($request);
+        // dd($request);
         $story->title = $request->title;
         $story->story = $request->story;
         $story->summary = $request->summary;
@@ -82,6 +82,7 @@ class StoryController extends Controller
         $story->title = $request->title;
         $story->is_public = $request->is_public;
         $story->save();
+        return to_route('story-page', $story->slug)->with('success', 'Project was Edit successfully');
     }
 
     /**
@@ -90,5 +91,29 @@ class StoryController extends Controller
     public function destroy(Story $story)
     {
         //
+    }
+
+    public function addFavorite(UpdateStoryRequest $request, Story $story)
+    {
+        $user = auth()->user();
+
+        if ($request->is_favorite) {
+            if (!$user->favoriteStories->contains($story->id)) {
+                // Añadir la historia a los favoritos del usuario
+                $user->favoriteStories()->attach($story->id);
+               // return response()->json(['message' => 'Story added to favorites.']);
+            } else {
+                //return response()->json(['message' => 'Story already in favorites.'], 409);
+            }
+        } else {
+            if ($user->favoriteStories->contains($story->id)) {
+                // Eliminar la historia de los favoritos del usuario
+                $user->favoriteStories()->detach($story->id);
+                
+            } else {
+               // return response()->json(['message' => 'Story not found in favorites.'], 404);
+            }
+        }
+        return to_route('story-page', $story->slug)->with('success', 'Project was Edit successfully');
     }
 }

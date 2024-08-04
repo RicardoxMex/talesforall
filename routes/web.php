@@ -12,7 +12,7 @@ use Inertia\Inertia;
 
 
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     // Ruta para "Mis Historias"
     Route::get('/my-stories', [TalesForAllController::class, 'myStories'])->name('my-stories');
     // Ruta para "Favoritos"
@@ -26,7 +26,7 @@ Route::get('/explore-stories', [TalesForAllController::class, 'exploreStories'])
 Route::get('/create-story', [TalesForAllController::class, 'createStory'])->name('create-story');
 Route::get('/story/{slug}', [TalesForAllController::class, 'show'])->name('story-page');
 Route::resource('story', StoryController::class)->except(['create', 'edit']);
-
+Route::match(['post', 'patch'], '/addFavorite/{story}', [StoryController::class, 'addFavorite'])->name('story.addFav');
 
 /*
 Route::get('/', function () {

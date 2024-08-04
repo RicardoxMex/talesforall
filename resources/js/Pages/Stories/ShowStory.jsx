@@ -5,68 +5,67 @@ import Story from '@/Components/TalesForAll/Story';
 
 const ShowStory = ({ storyData, auth }) => {
   const story = storyData.data;
-  //console.log(story)
   const [editTitle, setEditTitle] = useState(false);
   const [title, setTitle] = useState(story.title);
   const [is_public, setIsPublic] = useState(story.is_public);
-  const [hasChanged, setHasChanged] = useState(false); 
+  const [is_favorite, setIsFavorite] = useState(story.is_favorite); // Estado para favoritos
+  const [hasChanged, setHasChanged] = useState(false);
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
-    //setHasChanged(true); // Marca que se ha cambiado algo
   };
 
   const togglePublicStatus = () => {
     setIsPublic(prev => !prev);
-    setHasChanged(true); // Marca que se ha cambiado algo
+    setHasChanged(true);
   };
 
   useEffect(() => {
     if (hasChanged) {
       saveData();
-      setHasChanged(false); // Resetea la marca después de guardar
+      setHasChanged(false);
     }
   }, [hasChanged]);
 
   const saveData = () => {
-    //console.log('Saving data');
     router.post(route('story.update', { story: story.id }), {
       title,
-      is_public:is_public,
+      is_public: is_public,
       _method: 'patch',
     });
-    setEditTitle(false)
+    setEditTitle(false);
+  };
+
+  const addFavorite = () => {
+    setIsFavorite(!is_favorite);
+    router.post(route('story.addFav', { story: story.id }), {
+      is_favorite: !is_favorite,
+      _method: 'patch',
+    });
+  };
+
+  const handleBack = () => {
+    window.history.back();
   };
 
   return (
     <TalesLayout auth={auth}>
-      <div className="py-12 bg-gray-100 min-h-screen flex items-center justify-center">
+      <div className="py-12 bg-gray-100 min-h-screen flex flex-col items-center">
         <Head title={title} />
 
         <div className="w-full max-w-4xl bg-white border border-gray-300 shadow-lg rounded-lg overflow-hidden">
           <div className="p-6 border-b border-gray-300">
+            <button
+              onClick={handleBack}
+              className="mb-4 py-2 px-4 text-white bg-blue-500 hover:bg-blue-600 rounded-lg"
+            >
+              Back
+            </button>
+
             {auth.user ? (
               <div>
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-4">
                   <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">{title}</h1>
-                  {/**
-                   * <div className="flex flex-wrap gap-2">
-                    <button
-                      onClick={() => editTitle ? saveData() : setEditTitle(true)}
-                      className="bg-amber-500 hover:bg-amber-600 text-white py-1 px-4 rounded-lg font-medium transition duration-300"
-                    >
-                      {editTitle ? 'Save' : 'Edit'}
-                    </button>
-                    {editTitle && (
-                      <button
-                        onClick={() => setEditTitle(false)}
-                        className="bg-gray-500 hover:bg-gray-600 text-white py-1 px-4 rounded-lg font-medium transition duration-300"
-                      >
-                        Cancel
-                      </button>
-                    )}
-                  </div>
-                   */}
                 </div>
                 {editTitle && (
                   <input
@@ -109,6 +108,17 @@ const ShowStory = ({ storyData, auth }) => {
                 </span>
               ))}
             </div>
+
+            {auth.user && (
+              <div className="flex justify-end">
+                <button
+                  onClick={addFavorite}
+                  className={`w-full py-2 text-white text-lg rounded-md ${!is_favorite ? 'bg-teal-500 hover:bg-teal-600' : 'bg-red-500 hover:bg-red-600'} transition duration-300`}
+                >
+                  {is_favorite ? 'Remove from Favorites' : 'Add to Favorites'}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

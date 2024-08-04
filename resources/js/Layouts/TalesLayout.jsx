@@ -25,10 +25,11 @@ export default function Authenticated({ auth, header, children }) {
                                             <NavLink href={route('my-stories')} active={route().current('my-stories')}>
                                                 Mis Historias
                                             </NavLink>
-                                            {
-                                                /* <NavLink href={route('favorites')} active={route().current('favorites')}>
+                                            <NavLink href={route('favorites')} active={route().current('favorites')}>
                                                  Favoritos
                                              </NavLink>*
+                                            {
+                                                /* 
                                              <NavLink href={route('explore-stories')} active={route().current('explore-stories')}>
                                      Explorar Historias
                                  </NavLink>
