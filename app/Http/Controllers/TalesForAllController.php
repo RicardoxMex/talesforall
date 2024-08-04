@@ -21,7 +21,14 @@ class TalesForAllController extends Controller
     public function show($slug){
         $story = Story::where("slug","=", $slug)->firstOrFail();
         return Inertia::render('Stories/ShowStory', [
-            "storyData"=> new StoryResource($story)
+            "storyData"=> new StoryResource($story),
+        ]);
+    }
+    public function showFavorite($slug){
+        $story = Story::where("slug","=", $slug)->firstOrFail();
+        return Inertia::render('Stories/ShowStory', [
+            "storyData"=> new StoryResource($story),
+            'favorite'=> true
         ]);
     }
     public function myStories(){
@@ -41,10 +48,14 @@ class TalesForAllController extends Controller
     }
     public function favorites(){
         $user = auth()->user();
-        $_stories = $user->favoriteStories()->orderBy('created_at', 'desc')->paginate(9)->onEachSide(1);
+        $_stories = $user->favoriteStories()
+        ->orderBy('favorite_story_user.created_at', 'desc')
+        ->paginate(9)
+        ->onEachSide(1);
         
-        return Inertia::render('Stories/Stories', [
-            'stories' => StoryResource::collection($_stories)
+        return Inertia::render('Stories/Favorites', [
+            'stories' => StoryResource::collection($_stories),
+            'favorite'=> true
         ]);
     }
 

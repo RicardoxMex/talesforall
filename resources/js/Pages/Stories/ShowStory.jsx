@@ -3,7 +3,8 @@ import { Head, router } from '@inertiajs/react';
 import TalesLayout from '@/Layouts/TalesLayout';
 import Story from '@/Components/TalesForAll/Story';
 
-const ShowStory = ({ storyData, auth }) => {
+const ShowStory = ({ storyData, auth, favorite=false }) => {
+  console.log('type',favorite)
   const story = storyData.data;
   const [editTitle, setEditTitle] = useState(false);
   const [title, setTitle] = useState(story.title);
@@ -43,9 +44,13 @@ const ShowStory = ({ storyData, auth }) => {
       _method: 'patch',
     });
   };
-
+ 
   const handleBack = () => {
-    window.history.back();
+    
+    if(favorite){
+      return router.visit('/favorites')
+    }
+    return router.visit('/my-stories')
   };
 
   return (

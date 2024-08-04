@@ -1,10 +1,11 @@
 import { Link } from '@inertiajs/react';
 import React from 'react';
 
-const StoryCard = ({ id, title, summary, author, rating, coverImage = '/img/TalesForAll_card.webp', slug, categories, is_public }) => {
+const StoryCard = ({ id, title, summary, author, rating, coverImage = '/img/TalesForAll_card.webp', slug, categories, is_public, favorite=false }) => {
+  console.log(favorite)
   return (
     <Link 
-      href={route('story-page', slug)} 
+    href={favorite ? route('favorite-page', slug) : route('story-page', slug)} 
       className="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-row h-[250px] md:flex-col md:h-[400px]"
     >
       {coverImage && (

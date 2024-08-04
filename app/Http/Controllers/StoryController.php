@@ -101,19 +101,14 @@ class StoryController extends Controller
             if (!$user->favoriteStories->contains($story->id)) {
                 // Añadir la historia a los favoritos del usuario
                 $user->favoriteStories()->attach($story->id);
-               // return response()->json(['message' => 'Story added to favorites.']);
-            } else {
-                //return response()->json(['message' => 'Story already in favorites.'], 409);
+                return to_route('favorites')->with('success', 'Project was Edit successfully');
             }
         } else {
             if ($user->favoriteStories->contains($story->id)) {
                 // Eliminar la historia de los favoritos del usuario
                 $user->favoriteStories()->detach($story->id);
-                
-            } else {
-               // return response()->json(['message' => 'Story not found in favorites.'], 404);
+                return to_route('favorites')->with('success', 'Project was Edit successfully');
             }
         }
-        return to_route('story-page', $story->slug)->with('success', 'Project was Edit successfully');
     }
 }

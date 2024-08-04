@@ -24,7 +24,8 @@ Route::get('/', function () {
 })->name('home.index');
 Route::get('/explore-stories', [TalesForAllController::class, 'exploreStories'])->name('explore-stories');
 Route::get('/create-story', [TalesForAllController::class, 'createStory'])->name('create-story');
-Route::get('/story/{slug}', [TalesForAllController::class, 'show'])->name('story-page');
+Route::get('/stories/{slug}', [TalesForAllController::class, 'show'])->name('story-page');
+Route::get('/favorites/{slug}', [TalesForAllController::class, 'showFavorite'])->name('favorite-page');
 Route::resource('story', StoryController::class)->except(['create', 'edit']);
 Route::match(['post', 'patch'], '/addFavorite/{story}', [StoryController::class, 'addFavorite'])->name('story.addFav');
 
