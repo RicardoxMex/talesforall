@@ -3,8 +3,8 @@ import { Head, router } from '@inertiajs/react';
 import TalesLayout from '@/Layouts/TalesLayout';
 import Story from '@/Components/TalesForAll/Story';
 
-const ShowStory = ({ storyData, auth, favorite=false }) => {
- console.log(favorite)
+const ShowStory = ({ storyData, auth, page='' }) => {
+  console.log(page)
   const story = storyData.data;
   const [editTitle, setEditTitle] = useState(false);
   const [title, setTitle] = useState(story.title);
@@ -48,30 +48,14 @@ const ShowStory = ({ storyData, auth, favorite=false }) => {
       _method: 'patch',
     });
   };
- 
-  const handleBack = () => {
-    
-    if(favorite){
-      return router.visit('/favorites')
-    }
 
-    window.history.back();
-  };
 
   return (
-    <TalesLayout auth={auth}>
-      <div className="py-12 bg-gray-100 min-h-screen flex flex-col items-center">
-        <Head title={title} />
-
-        <div className="w-full max-w-4xl bg-white border border-gray-300 shadow-lg rounded-lg overflow-hidden">
-          <div className="p-6 border-b border-gray-300">
-            <button
-              onClick={handleBack}
-              className="mb-4 py-2 px-4 text-white bg-blue-500 hover:bg-blue-600 rounded-lg"
-            >
-              Back
-            </button>
-
+    <TalesLayout 
+    auth={auth}
+    >
+     <div className="border-gray-300">
+  
             {auth.user ? (
               <div>
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-4">
@@ -130,8 +114,6 @@ const ShowStory = ({ storyData, auth, favorite=false }) => {
               </div>
             )}
           </div>
-        </div>
-      </div>
     </TalesLayout>
   );
 };

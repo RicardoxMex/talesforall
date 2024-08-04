@@ -44,7 +44,7 @@ export default function CreateStory({ auth, categories }) {
         <TalesLayout
             auth={auth}
             title='Crear Historia'
-            style='bg-gray-100/[1] shadow-none'
+            style='bg-gray-100/[.9] shadow-none'
         >
             <div className="main-container">
                 <div className="form-container">
@@ -57,7 +57,7 @@ export default function CreateStory({ auth, categories }) {
                                 name="temaPrincipal"
                                 value={formData.temaPrincipal}
                                 onChange={handleChange}
-                                maxLength={50}
+                                maxLength={100}
                             />
                             {formErrors.temaPrincipal && <p className="error">{formErrors.temaPrincipal}</p>}
                         </div>
@@ -68,7 +68,7 @@ export default function CreateStory({ auth, categories }) {
                                 name="escenario"
                                 value={formData.escenario}
                                 onChange={handleChange}
-                                maxLength={50}
+                                maxLength={100}
                             />
                             {formErrors.escenario && <p className="error">{formErrors.escenario}</p>}
                         </div>
@@ -79,7 +79,7 @@ export default function CreateStory({ auth, categories }) {
                                 name="personajes"
                                 value={formData.personajes}
                                 onChange={handleChange}
-                                maxLength={50}
+                                maxLength={100}
                             />
                             {formErrors.personajes && <p className="error">{formErrors.personajes}</p>}
                         </div>

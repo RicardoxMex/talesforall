@@ -82,7 +82,7 @@ class StoryController extends Controller
         $story->title = $request->title;
         $story->is_public = $request->is_public;
         $story->save();
-        return to_route('story-page', $story->slug)->with('success', 'Project was Edit successfully');
+        return to_route('my-stories');
     }
 
     /**
@@ -101,13 +101,13 @@ class StoryController extends Controller
             if (!$user->favoriteStories->contains($story->id)) {
                 // Añadir la historia a los favoritos del usuario
                 $user->favoriteStories()->attach($story->id);
-                return to_route('favorites')->with('success', 'Project was Edit successfully');
+                return to_route('favorites');
             }
         } else {
             if ($user->favoriteStories->contains($story->id)) {
                 // Eliminar la historia de los favoritos del usuario
                 $user->favoriteStories()->detach($story->id);
-                return to_route('favorites')->with('success', 'Project was Edit successfully');
+                return to_route('favorites');
             }
         }
     }
