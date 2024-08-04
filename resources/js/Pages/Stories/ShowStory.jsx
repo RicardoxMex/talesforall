@@ -4,13 +4,19 @@ import TalesLayout from '@/Layouts/TalesLayout';
 import Story from '@/Components/TalesForAll/Story';
 
 const ShowStory = ({ storyData, auth, favorite=false }) => {
-  console.log('type',favorite)
+ 
   const story = storyData.data;
   const [editTitle, setEditTitle] = useState(false);
   const [title, setTitle] = useState(story.title);
   const [is_public, setIsPublic] = useState(story.is_public);
   const [is_favorite, setIsFavorite] = useState(story.is_favorite); // Estado para favoritos
   const [hasChanged, setHasChanged] = useState(false);
+
+  const curretUser = auth.user.id ?? 0
+  const author = story.user_id
+
+  console.log(story)
+
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -86,7 +92,7 @@ const ShowStory = ({ storyData, auth, favorite=false }) => {
               <h1 className="text-3xl sm:text-4xl font-serif font-bold mb-4 text-gray-800 text-center">{story.title}</h1>
             )}
 
-            {auth.user && (
+            {(auth.user && (curretUser==author))  && (
               <div className="p-6 border-t border-gray-300">
                 <button
                   onClick={togglePublicStatus}

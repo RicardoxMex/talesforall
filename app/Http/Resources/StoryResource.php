@@ -16,7 +16,8 @@ class StoryResource extends JsonResource
     public $_wrap = true;
     public function toArray(Request $request): array
     {
-        $user = User::where("id", $this->user_id)->first();
+        $author = User::where("id", $this->user_id)->first();
+        $user = auth()->user();
         $is_favorite = false;
         if($user->favoriteStories->contains($this->id)){
             $is_favorite = true;
@@ -28,10 +29,10 @@ class StoryResource extends JsonResource
             'summary'=>$this->summary,
             'story'=>$this->story,
             'categories'=>CategoryResource::collection($this->categories),
-            'author'=> $user->name,
+            'author'=> $author->name,
             'is_public'=>(bool)$this->is_public,
             'is_favorite'=>$is_favorite,
-            'user_id'=>(int)$user->id,
+            'user_id'=>(int)$author->id,
         ];
     }
 }

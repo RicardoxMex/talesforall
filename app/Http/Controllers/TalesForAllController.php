@@ -33,7 +33,6 @@ class TalesForAllController extends Controller
     }
     public function myStories(){
         $_stories = Story::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->paginate(9)->onEachSide(1);
-
         //dd($_stories);
         return Inertia::render('Stories/Stories', [
             'stories'=>StoryResource::collection($_stories)
@@ -41,7 +40,7 @@ class TalesForAllController extends Controller
     }
 
     public function exploreStories(){
-        $_stories = Story::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->paginate(9)->onEachSide(1);
+        $_stories = Story::where('is_public', true)->orderBy('created_at', 'desc')->paginate(9)->onEachSide(1);
         return Inertia::render('Stories/ExploreStories', [
             'stories'=>StoryResource::collection($_stories)
         ]);

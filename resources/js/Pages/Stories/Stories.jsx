@@ -33,7 +33,7 @@ export default function Stories({ auth, stories }) {
               </div>
             ) : (
               <div className="text-center text-gray-600">
-                <p className="text-lg font-medium">No tienes cuentos favoritos.</p>
+                <p className="text-lg font-medium">No tienes cuentos creados. unu</p>
               </div>
             )}
             {storieslist.length > 0 && (
