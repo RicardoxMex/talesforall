@@ -37,6 +37,7 @@ class StoryResource extends JsonResource
             'is_public'=>(bool)$this->is_public,
             'is_favorite'=>$is_favorite,
             'user_id'=>(int)$author->id,
+            'image_prompt'=>$this->image_prompt
         ];
     }
 }

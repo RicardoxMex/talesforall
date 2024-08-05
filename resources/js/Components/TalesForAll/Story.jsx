@@ -12,6 +12,7 @@ const Story = ({ cuento, title=true }) => {
               src={cuento?.coverImage || '/img/TalesForAll.webp'}
               alt={`${cuento.title} cover`}
               className="w-full h-auto rounded-lg mb-6"
+              title={cuento.image_prompt}
             />
             {cuento.story.split('\n').map((line, index) => (
                 <p className="mb-4 text-gray-700" key={index}>
