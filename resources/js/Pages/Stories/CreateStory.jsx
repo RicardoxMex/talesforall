@@ -6,6 +6,7 @@ import Story from '@/Components/TalesForAll/Story';
 
 export default function CreateStory({ auth, categories }) {
     const { cuento, isLoading, generateStory, handleChange, formData, formErrors, isError } = useGenerateStory();
+    //console.log(cuento)
     const selectedCategoryIds = formData.tono.map(selectedName => {
         // Encuentra la categoría cuyo nombre coincide con el nombre seleccionado
         const category = categories.data.find(cat => cat.name === selectedName);
@@ -18,6 +19,7 @@ export default function CreateStory({ auth, categories }) {
     useEffect(() => {
         if (cuento?.length != 0 && cuento !=  undefined
         ) {
+            console.log('cuento generado', cuento)
             let user_id = 0;
             if(auth.user != null){
                 user_id = auth.user.id;

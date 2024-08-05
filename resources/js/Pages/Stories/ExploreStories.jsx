@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 export default function ExploreStories({ auth, stories, page }) {
     const [storieslist , setStoriesList] = useState(stories.data ?? [])
-    console.log(page)
+    //console.log(page)
     return (
         <TalesLayout auth={auth} title='Explorar Historias'>
             <StoryList 

@@ -1,6 +1,6 @@
 # Tales For All
 
-**Tales For All** es una plataforma desarrollada en Laravel/React que genera cuentos utilizando inteligencia artificial con Perplexity. El proyecto permite a los usuarios generar historias únicas y personalizadas, las hisotias generadas se guardan en la base de datos ya sea para el mismo usuario o publicas
+**Tales For All** es una plataforma desarrollada en Laravel/React que genera cuentos y sus respectivos prompts para generar imágenes utilizando inteligencia artificial con Perplexity. El proyecto permite a los usuarios generar historias únicas y personalizadas. Las historias generadas se guardan en la base de datos, ya sea para el mismo usuario o como públicas.
 
 ## Características
 
