@@ -2,7 +2,6 @@ import { Link } from '@inertiajs/react';
 import React from 'react';
 
 const StoryCard = ({ id, title, summary, author, rating, coverImage = '/img/TalesForAll_card.webp', slug, categories, is_public, page}) => {
-  console.log(page)
   const selectPage = () => {
       if(page == 'favorites'){
         return route('favorite-page', slug)

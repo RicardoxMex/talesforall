@@ -54,6 +54,7 @@ const ShowStory = ({ storyData, auth, page='' }) => {
     <TalesLayout 
     auth={auth}
     >
+      <Head title={story.title} />
      <div className="border-gray-300">
   
             {auth.user ? (

@@ -3,7 +3,6 @@ import StoryCard from '@/Components/TalesForAll/StoryCard';
 import TalesLayout from '@/Layouts/TalesLayout';
 //stories.meta.links
 export default function StoryList({ auth, stories, links, page }) {
-    console.log(page)
     return (
     <>      
             {stories.length > 0 ? (
