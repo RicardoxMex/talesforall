@@ -9,7 +9,13 @@ class Story extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'title', 'story', 'summary', 'image_prompt', 'is_public', 'user_id',
+        'slug',
+        'title',
+        'story',
+        'summary',
+        'image_prompt',
+        'is_public',
+        'user_id',
     ];
 
     public function user()
@@ -24,6 +30,12 @@ class Story extends Model
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'category_story');
+        return $this->belongsToMany(Category::class, 'category_stories');
     }
+    
+    public function favoritedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'favorite_story_user')->withTimestamps();
+    }
+
 }

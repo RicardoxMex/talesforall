@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('story_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->integer('rating')->unsigned()->default(1); // Valoración entre 1 y 5
-            $table->text('review')->nullable(); // Comentario opcional
+            $table->integer('rating')->unsigned()->default(1); 
+            $table->text('review')->nullable(); 
             $table->timestamps();
         });
     }

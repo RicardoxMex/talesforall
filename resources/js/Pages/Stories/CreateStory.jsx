@@ -1,24 +1,34 @@
 import { Head, router, useForm } from '@inertiajs/react';
-import useGenerateStory from './useGenerateStory';
 import { useEffect } from 'react';
 import TalesLayout from '@/Layouts/TalesLayout';
+import useGenerateStory from './data/useGenerateStory';
+import Story from '@/Components/TalesForAll/Story';
 
-export default function Index({ auth, categories }) {
-    console.log(auth);
-   // const { data, setData, post, errors, reset } = useForm();
+export default function CreateStory({ auth, categories }) {
     const { cuento, isLoading, generateStory, handleChange, formData, formErrors, isError } = useGenerateStory();
+    const selectedCategoryIds = formData.tono.map(selectedName => {
+        // Encuentra la categoría cuyo nombre coincide con el nombre seleccionado
+        const category = categories.data.find(cat => cat.name === selectedName);
+
+        // Devuelve el ID de la categoría encontrada, o null si no se encuentra
+        return category ? category.id : null;
+      }).filter(id => id !== null); // Filtra los valores null para obtener solo los IDs válidos
+      
 
     useEffect(() => {
-        console.log(cuento?.length);
         if (cuento?.length != 0 && cuento !=  undefined
         ) {
-            let user_id = !auth?.user ? auth?.user?.id : 0
+            let user_id = 0;
+            if(auth.user != null){
+                user_id = auth.user.id;
+            }
             router.post('/story', {
                 title:cuento.title,
                 story:cuento.story,
                 summary:cuento.summary,
-                image_prompt:cuento.image_prompt || '', // Ajuste para manejar la ausencia de image_prompt
-                user_id: user_id, // Ajuste para manejar la ausencia de user_id
+                image_prompt:cuento.image_prompt || '',
+                categories: selectedCategoryIds,
+                user_id: user_id, 
                })
         }
     }, [cuento]); // Este efecto se activará cuando 'cuento' cambie
@@ -33,13 +43,12 @@ export default function Index({ auth, categories }) {
     return (
         <TalesLayout
             auth={auth}
+            title='Crear Historia'
+            style='bg-gray-100/[.9] shadow-none'
         >
-            <Head title='Crear Historia'/>
-            <h1>Tales For All</h1>
-
             <div className="main-container">
                 <div className="form-container">
-                    <h1>Nuevo Cuento</h1>
+                    <h1 className='text-2xl'>Nuevo Cuento</h1>
                     <form onSubmit={handleOnSubmit}>
                         <div>
                             <label>Tema Principal:</label>
@@ -48,7 +57,7 @@ export default function Index({ auth, categories }) {
                                 name="temaPrincipal"
                                 value={formData.temaPrincipal}
                                 onChange={handleChange}
-                                maxLength={50}
+                                maxLength={100}
                             />
                             {formErrors.temaPrincipal && <p className="error">{formErrors.temaPrincipal}</p>}
                         </div>
@@ -59,7 +68,7 @@ export default function Index({ auth, categories }) {
                                 name="escenario"
                                 value={formData.escenario}
                                 onChange={handleChange}
-                                maxLength={50}
+                                maxLength={100}
                             />
                             {formErrors.escenario && <p className="error">{formErrors.escenario}</p>}
                         </div>
@@ -70,7 +79,7 @@ export default function Index({ auth, categories }) {
                                 name="personajes"
                                 value={formData.personajes}
                                 onChange={handleChange}
-                                maxLength={50}
+                                maxLength={100}
                             />
                             {formErrors.personajes && <p className="error">{formErrors.personajes}</p>}
                         </div>
@@ -99,13 +108,7 @@ export default function Index({ auth, categories }) {
                         >
                             Crear cuento
                         </button>
-                        <button
-                            type="button"
-                            className="w-full mt-2 bg-green-300 rounded-lg p-3 text-white"
-                            disabled
-                        >
-                            Guardar
-                        </button>
+                        
                     </form>
                 </div>
                 <div className="cuento-container p-6 bg-gray-100 rounded-lg shadow-lg flex flex-col items-center justify-center">
@@ -114,12 +117,7 @@ export default function Index({ auth, categories }) {
                     ) : (
                         cuento ? (
                             <div className="cuento p-4 bg-white rounded-lg shadow-md">
-                                <h1 className="text-2xl font-bold mb-4 text-gray-800">{cuento.title}</h1>
-                                {cuento.story.split('\n').map((line, index) => (
-                                    <p className="mb-4 text-gray-700" key={index}>
-                                        {line}
-                                    </p>
-                                ))}
+                                <Story cuento={cuento} />
                             </div>
                         ) : (
                             !isError ? (

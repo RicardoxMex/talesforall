@@ -10,28 +10,24 @@ use Illuminate\Foundation\Application;
 use App\Http\Controllers\HomeController;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return redirect()->route('create-story');
-})->name('home.index');
+
 
 Route::middleware(['auth'])->group(function () {
-    // Ruta para el Dashboard
-
     // Ruta para "Mis Historias"
     Route::get('/my-stories', [TalesForAllController::class, 'myStories'])->name('my-stories');
-
-    // Ruta para "Explorar Historias"
-    Route::get('/explore-stories', [TalesForAllController::class, 'exploreStories'])->name('explore-stories');
-
-    // Ruta para "Crear Historia"
-    Route::get('/create-story', [TalesForAllController::class, 'createStory'])->name('create-story');
-
     // Ruta para "Favoritos"
     Route::get('/favorites', [TalesForAllController::class, 'favorites'])->name('favorites');
 });
-
-//Routes
+//Public Routes
+Route::get('/', function () {
+    return redirect()->route('create-story');
+})->name('home.index');
+Route::get('/explore-stories', [TalesForAllController::class, 'exploreStories'])->name('explore-stories');
+Route::get('/create-story', [TalesForAllController::class, 'createStory'])->name('create-story');
+Route::get('/stories/{slug}', [TalesForAllController::class, 'show'])->name('story-page');
+Route::get('/favorites/{slug}', [TalesForAllController::class, 'showFavorite'])->name('favorite-page');
 Route::resource('story', StoryController::class)->except(['create', 'edit']);
+Route::match(['post', 'patch'], '/addFavorite/{story}', [StoryController::class, 'addFavorite'])->name('story.addFav');
 
 /*
 Route::get('/', function () {
@@ -43,9 +39,9 @@ Route::get('/', function () {
 });*/
 
 
-Route::get('/dashboard', function () {
+/*Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');*/
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -53,4 +49,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

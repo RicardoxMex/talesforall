@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Story;
 use App\Http\Requests\StoreStoryRequest;
 use App\Http\Requests\UpdateStoryRequest;
+use Illuminate\Support\Str;
 
 class StoryController extends Controller
 {
@@ -29,20 +31,31 @@ class StoryController extends Controller
      */
     public function store(StoreStoryRequest $request)
     {
-       $story = new Story();
+        $story = new Story();
+        // dd($request);
+        $story->title = $request->title;
+        $story->story = $request->story;
+        $story->summary = $request->summary;
+        $story->image_prompt = $request->image_prompt;
 
-       $story->title = $request->title;
-       $story->story = $request->story;
-       $story->summary = $request->summary;
-       $story->image_prompt = $request->image_prompt;
+        $slug = Str::slug($story->title);
+        $existingStoryCount = Story::where('slug', 'like', "$slug%")->count();
+        if ($existingStoryCount > 0) {
+            $slug = "{$slug}-{$existingStoryCount}";
+        }
+        $story->slug = $slug;
 
-       if($request->user_id == 0){
-        $story->user_id = 1;
-       }else{
-        $story->user_id = $request->user_id;
-       }
+        if ($request->user_id == 0) {
+            $story->user_id = 1;
+        } else {
+            $story->user_id = $request->user_id;
+        }
+        $story->updated_at = now();
 
-       $story->save();
+        $story->save();
+
+        // Asociar categorías
+        $story->categories()->attach($request->categories);
     }
 
     /**
@@ -66,7 +79,10 @@ class StoryController extends Controller
      */
     public function update(UpdateStoryRequest $request, Story $story)
     {
-        //
+        $story->title = $request->title;
+        $story->is_public = $request->is_public;
+        $story->save();
+        return to_route('my-stories');
     }
 
     /**
@@ -75,5 +91,24 @@ class StoryController extends Controller
     public function destroy(Story $story)
     {
         //
+    }
+
+    public function addFavorite(UpdateStoryRequest $request, Story $story)
+    {
+        $user = auth()->user();
+
+        if ($request->is_favorite) {
+            if (!$user->favoriteStories->contains($story->id)) {
+                // Añadir la historia a los favoritos del usuario
+                $user->favoriteStories()->attach($story->id);
+                return to_route('favorites');
+            }
+        } else {
+            if ($user->favoriteStories->contains($story->id)) {
+                // Eliminar la historia de los favoritos del usuario
+                $user->favoriteStories()->detach($story->id);
+                return to_route('favorites');
+            }
+        }
     }
 }
