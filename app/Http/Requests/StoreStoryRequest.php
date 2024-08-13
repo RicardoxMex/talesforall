@@ -22,7 +22,12 @@ class StoreStoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'string',
+            'story' => 'string',
+            'summary' => 'string',
+            'categories' => 'array',
+            'categories.*' => 'string',
+            'user_id' => 'numeric'
         ];
     }
 }

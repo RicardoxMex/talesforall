@@ -31,31 +31,28 @@ class StoryController extends Controller
      */
     public function store(StoreStoryRequest $request)
     {
-        $story = new Story();
-        // dd($request);
-        $story->title = $request->title;
-        $story->story = $request->story;
-        $story->summary = $request->summary;
-        $story->image_prompt = $request->image_prompt;
+        if ($request->validated()) {
+            $story = new Story();
+            $story->title = $request->title;
+            $story->story = $request->story;
+            $story->summary = $request->summary;
+            $story->image_prompt = $request->image_prompt;
 
-        $slug = Str::slug($story->title);
-        $existingStoryCount = Story::where('slug', 'like', "$slug%")->count();
-        if ($existingStoryCount > 0) {
-            $slug = "{$slug}-{$existingStoryCount}";
+            $slug = Str::slug($story->title);
+            $existingStoryCount = Story::where('slug', 'like', "$slug%")->count();
+            if ($existingStoryCount > 0) {
+                $slug = "{$slug}-{$existingStoryCount}";
+            }
+            $story->slug = $slug;
+
+            $story->user_id  = $request->user_id == 0 ? 1 : $request->user_id;
+            $story->updated_at = now();
+
+            $story->save();
+            $categories = Category::whereIn('name', $request->categories)->pluck('id')->toArray();
+            $story->categories()->attach($categories);
+
         }
-        $story->slug = $slug;
-
-        if ($request->user_id == 0) {
-            $story->user_id = 1;
-        } else {
-            $story->user_id = $request->user_id;
-        }
-        $story->updated_at = now();
-
-        $story->save();
-
-        // Asociar categorías
-        $story->categories()->attach($request->categories);
     }
 
     /**

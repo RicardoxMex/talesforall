@@ -1,46 +1,26 @@
-import { Head, router, useForm } from '@inertiajs/react';
-import { useEffect } from 'react';
 import TalesLayout from '@/Layouts/TalesLayout';
-import useGenerateStory from './data/useGenerateStory';
 import Story from '@/Components/TalesForAll/Story';
+import { useStoryForm } from './hooks/useStoryForm';
+import { useGenerateStory } from './hooks/useGenerateStory';
+import { useSaveStory } from './hooks/useSaveStory';
+
+
+
+
+
 
 export default function CreateStory({ auth, categories }) {
-    const { cuento, isLoading, generateStory, handleChange, formData, formErrors, isError } = useGenerateStory();
-    //console.log(cuento)
-    const selectedCategoryIds = formData.tono.map(selectedName => {
-        // Encuentra la categoría cuyo nombre coincide con el nombre seleccionado
-        const category = categories.data.find(cat => cat.name === selectedName);
+    const { formStory, updateForm, validateForm, formErrors } = useStoryForm()
+    const { story, generateStory, isError, isLoading } = useGenerateStory({ formStory })
+    const {isSave} = useSaveStory({auth, story})
 
-        // Devuelve el ID de la categoría encontrada, o null si no se encuentra
-        return category ? category.id : null;
-      }).filter(id => id !== null); // Filtra los valores null para obtener solo los IDs válidos
-      
-
-    useEffect(() => {
-        if (cuento?.length != 0 && cuento !=  undefined
-        ) {
-            console.log('cuento generado', cuento)
-            let user_id = 0;
-            if(auth.user != null){
-                user_id = auth.user.id;
-            }
-            router.post('/story', {
-                title:cuento.title,
-                story:cuento.story,
-                summary:cuento.summary,
-                image_prompt:cuento.image_prompt || '',
-                categories: selectedCategoryIds,
-                user_id: user_id, 
-               })
+    const handleOnSubmit = (event) => {
+        event.preventDefault()
+        console.log(validateForm())
+        if (validateForm()) {
+            generateStory()
         }
-    }, [cuento]); // Este efecto se activará cuando 'cuento' cambie
-
-    const handleOnSubmit = async (event) => {
-        event.preventDefault();
-        await generateStory();
-        
-    };
-    
+    }
 
     return (
         <TalesLayout
@@ -56,34 +36,34 @@ export default function CreateStory({ auth, categories }) {
                             <label>Tema Principal:</label>
                             <input
                                 type="text"
-                                name="temaPrincipal"
-                                value={formData.temaPrincipal}
-                                onChange={handleChange}
+                                name="mainSubject"
+                                value={formStory.mainSubject}
+                                onChange={updateForm}
                                 maxLength={100}
                             />
-                            {formErrors.temaPrincipal && <p className="error">{formErrors.temaPrincipal}</p>}
+                            {formErrors.mainSubject && <p className="error">{formErrors.mainSubject}</p>}
                         </div>
                         <div>
                             <label>Escenario:</label>
                             <input
                                 type="text"
-                                name="escenario"
-                                value={formData.escenario}
-                                onChange={handleChange}
+                                name="setting"
+                                value={formStory.setting}
+                                onChange={updateForm}
                                 maxLength={100}
                             />
-                            {formErrors.escenario && <p className="error">{formErrors.escenario}</p>}
+                            {formErrors.setting && <p className="error">{formErrors.setting}</p>}
                         </div>
                         <div>
                             <label>Personajes:</label>
                             <input
                                 type="text"
-                                name="personajes"
-                                value={formData.personajes}
-                                onChange={handleChange}
+                                name="characters"
+                                value={formStory.characters}
+                                onChange={updateForm}
                                 maxLength={100}
                             />
-                            {formErrors.personajes && <p className="error">{formErrors.personajes}</p>}
+                            {formErrors.characters && <p className="error">{formErrors.characters}</p>}
                         </div>
                         <div>
                             <label>Tono:</label>
@@ -92,16 +72,16 @@ export default function CreateStory({ auth, categories }) {
                                     <label key={category.name}>
                                         <input
                                             type="checkbox"
-                                            name="tono"
+                                            name="tone"
                                             value={category.name}
-                                            checked={formData.tono.includes(category.name)}
-                                            onChange={handleChange}
+                                            checked={formStory.tones.includes(category.name)}
+                                            onChange={updateForm}
                                         />
                                         {category.name}
                                     </label>
                                 ))}
                             </div>
-                            {formErrors.tono && <p className="error">{formErrors.tono}</p>}
+                            {formErrors.tones && <p className="error">{formErrors.tones}</p>}
                         </div>
                         <button
                             type="submit"
@@ -110,16 +90,16 @@ export default function CreateStory({ auth, categories }) {
                         >
                             Crear cuento
                         </button>
-                        
+
                     </form>
                 </div>
                 <div className="cuento-container p-6 bg-gray-100 rounded-lg shadow-lg flex flex-col items-center justify-center">
                     {isLoading ? (
                         <div className="spinner border-4 border-t-4 border-blue-500 rounded-full w-12 h-12 animate-spin"></div>
                     ) : (
-                        cuento ? (
+                        story ? (
                             <div className="cuento p-4 bg-white rounded-lg shadow-md">
-                                <Story cuento={cuento} />
+                                <Story cuento={story} />
                             </div>
                         ) : (
                             !isError ? (

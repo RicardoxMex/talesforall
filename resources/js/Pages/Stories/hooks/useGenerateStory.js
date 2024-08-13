@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { generateText } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
-import { useForm } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 
 const perplexity = createOpenAI({
     apiKey: import.meta.env.VITE_PER_API_PUBLIC_KEY,
@@ -10,31 +10,15 @@ const perplexity = createOpenAI({
 
 
 
-export default function useGenerateStory() {
-    const [cuento, setCuento] = useState(null);
+export function useGenerateStory({ formStory }) {
+    const [story, setStory] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
-    const { data, setData, post, errors, reset } = useForm({
-        title: '',
-        story: '',
-        summary: '',
-        image_prompt: ''
-    });
-
-    const [formData, setFormData] = useState({
-        temaPrincipal: '',
-        escenario: '',
-        personajes: '',
-        tono: []
-    });
-    const [formErrors, setFormErrors] = useState({});
-
-
     const prompt = `Genera un cuento en español con los siguientes parámetros:
-    - Tema: ${formData.temaPrincipal}
-    - Escenario: ${formData.escenario}
-    - Personajes: ${formData.personajes}
-    - Tono: ${formData.tono.join(', ')}
+    - Tema: ${formStory.mainSubject}
+    - Escenario: ${formStory.setting}
+    - Personajes: ${formStory.characters}
+    - Tono: ${formStory.tones.join(', ')}
 
     El cuento debe tener al menos 300 palabras, distribuidas en 4 párrafos.
     los caracteres que debes de excluir en todos los cuentos son: " '
@@ -65,32 +49,6 @@ export default function useGenerateStory() {
         frequencyPenalty: 1
     }
 
-    const handleChange = (event) => {
-        const { name, value, checked } = event.target;
-
-        if (name === 'tono') {
-            setFormData((prevState) => {
-                const newTono = checked
-                    ? [...prevState.tono, value]
-                    : prevState.tono.filter((tono) => tono !== value);
-                return { ...prevState, tono: newTono };
-            });
-        } else {
-            setFormData({ ...formData, [name]: value });
-        }
-    };
-
-
-    const validateForm = () => {
-        const errors = {};
-        if (!formData.temaPrincipal) errors.temaPrincipal = 'El tema principal es obligatorio.';
-        if (!formData.escenario) errors.escenario = 'El escenario es obligatorio.';
-        if (!formData.personajes) errors.personajes = 'Los personajes son obligatorios.';
-        if (formData.tono.length === 0) {
-            errors.tono = 'Selecciona al menos un tono.';
-        }
-        return errors;
-    };
     const extractJsonString = (text) => {
         const startIndex = text.indexOf('{');
         const endIndex = text.indexOf('}') + 1;
@@ -101,42 +59,27 @@ export default function useGenerateStory() {
     }
 
     const generateStory = async () => {
-        setCuento("");
+        setStory(null);
         setIsLoading(true);
         setIsError(false);
-        setFormErrors([])
-
-        const validationErrors = validateForm();
-        if (Object.keys(validationErrors).length > 0) {
-            setFormErrors(validationErrors);
-            setIsLoading(false);
-            return;
-        }
-
 
         try {
             const { text } = await generateText(CONFIG_PERPLEXITY);
-            //console.log(text);
             const newText = extractJsonString(text)
-            const cuentoGenerado = JSON.parse(newText);
-
-
-            setCuento(cuentoGenerado);
-            /* //console.log(cuentoGenerado);
-             setData('title', cuento.title )
-             setData('story', cuento.story )
-             setData('summary', cuento.summary )
-             //console.log('submit', data)*/
-
+            const newStory = JSON.parse(newText);
+            setStory({
+                title:newStory.title,
+                story:newStory.story,
+                summary:newStory.summary,
+                image_prompt: newStory.image_prompt,
+                categories:formStory.tones
+            });
         } catch (error) {
-            console.error('Error generating story:', error);
             setIsError(true);
-            // Manejar el error aquí si es necesario
         } finally {
-
             setIsLoading(false);
         }
     };
 
-    return { cuento, isLoading, generateStory, handleChange, formData, formErrors, isError, post, data };
+    return { story, generateStory, isLoading, isError };
 }
